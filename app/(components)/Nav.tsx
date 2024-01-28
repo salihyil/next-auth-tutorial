@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { auth } from "@/auth";
+import Link from "next/link";
+import { UserButton } from "./auth/user-button";
 
 const Nav = async () => {
   //https://next-auth.js.org/configuration/nextjs#in-app-router
   const session = await auth();
-
-/*   console.log("session:: ", session); */
 
   return (
     <header className="bg-gray-600 text-gray-100">
@@ -18,9 +17,12 @@ const Nav = async () => {
           <Link href="/Member">Member</Link>
           <Link href="/Public">Public</Link>
           {session ? (
-            <Link href="/api/auth/signout?callbackUrl=/">Logout</Link>
+            <>
+              <Link href="/settings">Change Role</Link>
+              <UserButton />
+            </>
           ) : (
-            <Link href="/api/auth/signin">Login</Link>
+            <Link href="/auth/login">Login</Link>
           )}
         </div>
       </nav>

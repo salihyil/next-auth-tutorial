@@ -10,13 +10,14 @@ const Member = () => {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect("/api/auth/signin?callbackUrl=/ClientMember");
+      redirect("/auth/login?callbackUrl=/ClientMember");
     },
   });
 
   return (
     <div>
       <h1>Protecting Pages - Client Side Page - Member Client Session</h1>
+      <p>name: {session?.user?.name}</p>
       <p>user email: {session?.user?.email}</p>
       <p>user role: {session?.user?.role}</p>
     </div>

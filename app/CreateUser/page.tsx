@@ -1,9 +1,9 @@
-import UserForm from "../(components)/UserForm";
+import { RegisterForm } from "../(components)/auth/register-form";
 
 const CreateUser = () => {
   return (
     <div>
-      <UserForm />
+      <RegisterForm />
     </div>
   );
 };

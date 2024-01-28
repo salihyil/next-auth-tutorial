@@ -1,4 +1,4 @@
-import User from "@/app/(models)/User";
+import { db } from "@/lib/db";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,8 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log(body); // {formData: { name: 'qwerty', email: 'qwerty@gmail.com', password: '123456' }
-
     const userData = body.formData;
 
     //Confirm data exists
@@ -17,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
 
     // check for duplicate emails
-    const duplicate = await User.findOne({ email: userData.email }).lean().exec();
+    const duplicate = await db.user.findUnique({ where: { email: userData.email } });
 
     if (duplicate) {
       return NextResponse.json({ message: "Duplicate Email" }, { status: 409 });
@@ -26,10 +24,15 @@ export async function POST(req: NextRequest) {
     const hashPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashPassword;
 
-    await User.create(userData);
-    return NextResponse.json({ message: "User Created." }, { status: 201 });
+    await db.user.create({
+      data: {
+        ...userData,
+      },
+    });
+
+    return NextResponse.json({ message: "User created." }, { status: 201 });
   } catch (error) {
-    console.log(error);
+    console.log("error:", error);
     return NextResponse.json({ message: "Error", error }, { status: 500 });
   }
 }

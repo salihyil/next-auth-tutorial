@@ -15,5 +15,6 @@ export function auth(
     | [NextApiRequest, NextApiResponse]
     | []
 ) {
+ 
   return getServerSession(...args, options);
 }

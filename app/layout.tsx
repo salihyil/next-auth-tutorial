@@ -1,6 +1,7 @@
 import AuthProvider from "@/app/(components)/AuthProvider";
 import Nav from "./(components)/Nav";
 import "./globals.css";
+import { Toaster } from "@/app/(components)/ui/sonner";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <AuthProvider>
         <body className="bg-gray-100">
+          <Toaster />
           <Nav />
           <div className="m-2">{children}</div>
         </body>
