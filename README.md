@@ -32,7 +32,7 @@ Key Features:
 ### Cloning the repository
 
 ```shell
-git clone https://github.com/salihyil/next-auth-v5-advanced-guide.git
+git clone https://github.com/salihyil/next-auth-tutorial.git
 ```
 
 ### Install packages
