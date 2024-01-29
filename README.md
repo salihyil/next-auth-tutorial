@@ -69,6 +69,13 @@ npx prisma db push
 npm run dev
 ```
 
+### Test User Login
+
+```shell
+email: test@test.com
+password: 123456
+```
+
 ## Available commands
 
 Running commands with npm `npm run [command]`
