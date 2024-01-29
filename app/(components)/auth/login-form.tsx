@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -30,6 +30,7 @@ export const LoginForm = () => {
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
+  const router = useRouter();
 
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined>("");
@@ -49,17 +50,26 @@ export const LoginForm = () => {
     setSuccess("");
     setIsPending(true);
 
-    try {
-      const res = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-      });
-    } catch (error) {
-      if (error) {
-        if (error.error === "CredentialsSignin") {
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+    });
+    console.log(res);
+
+    if (res.ok) {
+      setSuccess("Successfully logged in!  ");
+
+      setIsPending(false);
+      router.push(DEFAULT_LOGIN_REDIRECT);
+      router.refresh();
+    } else {
+      setIsPending(false);
+      if (res.error) {
+        if (res.error === "CredentialsSignin") {
           setError("Invalid email or password!");
-        } else if (error.error === "OAuthAccountNotLinked") {
+        } else if (res.error === "OAuthAccountNotLinked") {
           setError("Email not linked to any account!");
         }
       } else {
