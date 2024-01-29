@@ -137,16 +137,6 @@ export const LoginForm = () => {
           <Button disabled={isPending} type="submit" className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
-          <button
-            onClick={() =>
-              signIn("credentials", {
-                callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-                email: form.getValues().email,
-                password: form.getValues().password,
-              })
-            }>
-            Sign in
-          </button>
         </form>
       </Form>
     </CardWrapper>
