@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -31,13 +31,18 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { SettingsSchema } from "@/schemas";
 import { UserRole } from "@prisma/client";
 import { toast } from "sonner";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 const SettingsPage = () => {
   const user = useCurrentUser();
-  const router = useRouter();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
-  const { update } = useSession();
+  const { update } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect(DEFAULT_LOGIN_REDIRECT);
+    },
+  });
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
