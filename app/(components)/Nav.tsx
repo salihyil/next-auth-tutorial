@@ -1,10 +1,12 @@
-import { auth } from "@/auth";
+"use client";
+
+import { useCurrentRole } from "@/hooks/use-current-role";
+import { UserRole } from "@prisma/client";
 import Link from "next/link";
 import { UserButton } from "./auth/user-button";
 
-const Nav = async () => {
-  //https://next-auth.js.org/configuration/nextjs#in-app-router
-  const session = await auth();
+const Nav = () => {
+  const role = useCurrentRole();
 
   return (
     <header className="bg-gray-600 text-gray-100">
@@ -12,11 +14,11 @@ const Nav = async () => {
         <div>My Site</div>
         <div className="flex gap-10">
           <Link href="/">Home</Link>
-          <Link href="/CreateUser">Create User</Link>
+          {role === UserRole.ADMIN && <Link href="/CreateUser">Create User</Link>}
           <Link href="/ClientMember">Client Member</Link>
           <Link href="/Member">Member</Link>
           <Link href="/Public">Public</Link>
-          {session ? (
+          {role ? (
             <>
               <Link href="/settings">Change Role</Link>
               <UserButton />
